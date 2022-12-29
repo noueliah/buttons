@@ -7,23 +7,29 @@ function Activities() {
     fetch("http://www.boredapi.com/api/activity")
       .then((response) => response.json()) // esto lo convierte a json
       .then((data) => {
-        setActivity(data.activity);
+        setActivities([...activities, data.activity]);
         setIsLoading(false);
       });
   }
 
-  const [activity, setActivity] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     loadActivity();
   }, []);
-  if (isLoading) {
+  if (activities.length === 0) {
     return <p>Loading...</p>;
   }
   return (
     <div>
-      <h1>{activity}</h1>
-      <button onClick={loadActivity}>something else</button>
+      <ul>
+        {activities.map((activity) => {
+          return <li key={activity.key}>{activity}</li>;
+        })}
+      </ul>
+      <button disabled={isLoading} onClick={loadActivity}>
+        something else
+      </button>
     </div>
   );
 }
